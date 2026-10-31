@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Centros de Salud - Búsqueda</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f9f9f9; }
+        .container { display: flex; gap: 40px; }
+        .filters { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 300px; }
+        .results { flex-grow: 1; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .card { border-bottom: 1px solid #eee; padding: 10px 0; }
+        label { display: block; margin-top: 15px; font-weight: bold; }
+        select, button { width: 100%; padding: 8px; margin-top: 5px; }
+        button { background-color: #2c3e50; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 20px; }
+        button:hover { background-color: #34495e; }
+    </style>
+</head>
+<body>
+
+    <h1>BIENVENIDO</h1>
+    <p>Esta página muestra resultados únicamente de la Región de Valparaíso.</p>
+
+    <div class="container">
+        <!-- Panel de Filtros (Entrada de información) -->
+        <div class="filters">
+            <form method="GET" action="">
+                <label for="seguro">Seleccione Seguro:</label>
+                <select name="seguro" id="seguro">
+                    <option value="">-- Todos --</option>
+                    <option value="FONASA" {% if seguro_seleccionado == "FONASA" %}selected{% endif %}>FONASA</option>
+                    <option value="ISAPRE" {% if seguro_seleccionado == "ISAPRE" %}selected{% endif %}>ISAPRE</option>
+                </select>
+
+                <label for="comuna">Seleccione Comuna:</label>
+                <select name="comuna" id="comuna">
+                    <option value="">-- Todas --</option>
+                    <option value="LIMACHE" {% if comuna_seleccionada == "LIMACHE" %}selected{% endif %}>LIMACHE</option>
+                    <option value="VIÑA DEL MAR" {% if comuna_seleccionada == "VIÑA DEL MAR" %}selected{% endif %}>VIÑA DEL MAR</option>
+                </select>
+
+                <label for="prioridad">Seleccione Prioridad:</label>
+                <select name="prioridad" id="prioridad">
+                    <option value="">-- Sin ordenar --</option>
+                    <option value="costo" {% if prioridad == "costo" %}selected{% endif %}>Menor Costo</option>
+                    <option value="distancia" {% if prioridad == "distancia" %}selected{% endif %}>Menor Distancia</option>
+                </select>
+
+                <button type="submit">Buscar / Filtrar</button>
+            </form>
+        </div>
+
+        <!-- Panel de Resultados (Presentación de resultados) -->
+        <div class="results">
+            <h2>Resultados</h2>
+            {% if resultados %}
+                {% for centro in resultados %}
+                    <div class="card">
+                        <h3>{{ centro.nombre }}</h3>
+                        <p><strong>Seguro:</strong> {{ centro.seguro }} | <strong>Comuna:</strong> {{ centro.comuna }}</p>
+                        <p><strong>Costo Estimado:</strong> ${{ centro.costo }} | <strong>Distancia:</strong> {{ centro.distancia }} km</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p style="color: red; font-weight: bold;">No hay hospitales que cumplen, cambiar condiciones.</p>
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+</html>
